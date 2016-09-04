@@ -1,0 +1,52 @@
+<h1>Index</h1>
+<h2>Monitor</h2>
+<ul>
+    <li>Name: {{ monitor.getName}}</li>
+    <li>Port: {{ monitor.getPort}}</li>
+</ul>
+
+<h2>Issues</h2>
+<ul>
+    {{#each monitor.getAgentCheckIssues }}
+    <li>
+        <a href="/?controller=agent&amp;agentName={{getAgent.getName}}">{{getAgent.getName}}</a> {{getCheck.getName}} [{{getStatusCode}}]
+    </li>
+    {{/each}}
+</ul>
+
+<h2>Agents</h2>
+<ul>
+    {{#each monitor.getAgents }}
+    <li>
+        <a href="/?controller=agent&amp;agentName={{getName}}">{{getName}}</a>
+    </li>
+    {{/each}}
+</ul>
+
+
+<h2>Checks</h2>
+<ul>
+    {{#each monitor.getChecks }}
+    <li>
+        <a href="/?controller=check&amp;checkName={{getName}}">{{getName}}</a>
+    </li>
+    {{/each}}
+</ul>
+
+<h2>Changes</h2>
+<ul>
+    {{#each monitor.getChanges }}
+    <li>
+        <a href="/?controller=check&amp;checkName={{getAgentCheck.getCheck.getName}}">{{getAgentCheck.getCheck.getName}}</a> on {{getAgentCheck.getAgent.getName}} {{getLastStatusCode}} to {{getNewStatusCode}} @{{getStamp}}
+    </li>
+    {{/each}}
+</ul>
+
+<h2>Check Requests</h2>
+<ul>
+    {{#each monitor.getCheckRequests }}
+    <li>
+        <a href="/?controller=request&amp;requestId={{getId}}">{{getId}}</a> {{getAgent.getName}} {{getCheck.getName}} [{{getStatusCode}}]
+    </li>
+    {{/each}}
+</ul>

@@ -1,0 +1,29 @@
+<h1>Agent</h1>
+<ul>
+    <li>Name: {{ agent.getName}}</li>
+    <li>Last seen: {{ agent.getLastSeen}}</li>
+    <li>Groups: {{ agent.getGroupsString}}</li>
+    <li>Mute: {{ agent.isMute}}</li>
+</ul>
+
+<h2>Checks</h2>
+<ul>
+    {{#each agent.getAgentChecks }}
+    <li>
+        <a href="/?controller=check&amp;checkName={{getCheck.getName}}">{{getCheck.getName}}</a> [{{getStatusCode}}] @{{getStatusStamp}}
+    </li>
+    {{/each}}
+</ul>
+
+
+
+<h2>Check Requests</h2>
+<ul>
+    {{#each monitor.getCheckRequests }}
+    {{#if getAgent.getName == agent.getName}}
+    <li>
+        <a href="/?controller=request&amp;requestId={{getId}}">{{getId}}</a> {{getAgent.getName}} {{getCheck.getName}} [{{getStatusCode}}]
+    </li>
+    {{/if}}
+    {{/each}}
+</ul>

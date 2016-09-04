@@ -1,0 +1,40 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Component\Console\Application;
+
+$loader = null;
+$projectDir = null;
+
+if (substr(__DIR__, -35) == 'vendor/linkorb/guardian-monitor/bin') {
+    $loader = __DIR__ . '/../../../autoload.php';
+    $projectDir = __DIR__ . '/../../../..';
+} elseif (substr(__DIR__, -20) == 'guardian-monitor/bin') {
+    $loader = __DIR__ . '/../vendor/autoload.php';
+    $projectDir = __DIR__ . '/..';
+}
+
+if (!$loader || !file_exists($loader)) {
+    // Running as .phar file
+    $loader = __DIR__ . '/../autoload.php';
+    $projectDir = getcwd();
+}
+
+if (!file_exists($loader)) {
+    die(
+        'You must set up the project dependencies, run the following commands:' . PHP_EOL .
+        'curl -s http://getcomposer.org/installer | php' . PHP_EOL .
+        'php composer.phar install' . PHP_EOL
+    );
+}
+
+$autoLoader = require($loader);
+
+if (class_exists('AutoTune\Tuner')) {
+    \AutoTune\Tuner::init($autoLoader);
+}
+
+$application = new Application('Guardian Monitor', '1.0.0');
+$application->setCatchExceptions(true);
+$application->add(new \Guardian\Monitor\Command\RunCommand());
+$application->run();
