@@ -252,25 +252,26 @@ class Monitor
     public function runCheck(Check $check)
     {
         foreach ($this->agents as $agent) {
-            $checkRequest = new CheckRequest();
-            $id = uniqid();
-            $checkRequest->setId($id);
-            $checkRequest->setRequestStamp(time());
-            $checkRequest->setCheck($check);
-            $checkRequest->setAgent($agent);
-            $this->checkRequests[$id] = $checkRequest;
-            
-            $message = [
-                'type' => 'check_request',
-                'from' => 'monitor',
-                'payload' => [
-                    'requestId' => $checkRequest->getId(),
-                    'check' => $checkRequest->getCheck()->getName(),
-                    'command' => $check->getCommand()
-                ]
-            ];
-            //print_r($message);
-            $this->stomp->send('/topic/agent:' . $agent->getName(), json_encode($message));
+            if ($agent->hasCheck($check->getName())) {
+                $checkRequest = new CheckRequest();
+                $id = uniqid();
+                $checkRequest->setId($id);
+                $checkRequest->setRequestStamp(time());
+                $checkRequest->setCheck($check);
+                $checkRequest->setAgent($agent);
+                $this->checkRequests[$id] = $checkRequest;
+                
+                $message = [
+                    'type' => 'check_request',
+                    'from' => 'monitor',
+                    'payload' => [
+                        'requestId' => $checkRequest->getId(),
+                        'check' => $checkRequest->getCheck()->getName(),
+                        'command' => $check->getCommand()
+                    ]
+                ];
+                $this->stomp->send('/topic/agent:' . $agent->getName(), json_encode($message));
+            }
         }
     }
 
@@ -299,11 +300,19 @@ class Monitor
     {
         $this->agents[$agent->getName()] = $agent;
         foreach ($this->getChecks() as $check) {
-            $agentCheck = new AgentCheck();
-            $agentCheck->setId(uniqid());
-            $agentCheck->setCheck($check);
-            $agentCheck->setAgent($agent);
-            $agent->addAgentCheck($agentCheck);
+            $match = false;
+            foreach ($check->getGroupNames() as $groupName) {
+                if ($agent->hasGroupName($groupName)) {
+                    $match = true;
+                }
+            }
+            if ($match) {
+                $agentCheck = new AgentCheck();
+                $agentCheck->setId(uniqid());
+                $agentCheck->setCheck($check);
+                $agentCheck->setAgent($agent);
+                $agent->addAgentCheck($agentCheck);
+            }
         }
     }
     
@@ -325,6 +334,9 @@ class Monitor
                 if (!$this->hasAgent($from)) {
                     $agent = new Agent();
                     $agent->setName($from);
+                    foreach ($data['payload']['groups'] as $groupName) {
+                        $agent->addGroupName($groupName);
+                    }
                     $this->addAgent($agent);
                 }
                 $agent = $this->getAgent($from);

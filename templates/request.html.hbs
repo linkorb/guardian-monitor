@@ -7,3 +7,10 @@
     <li>Request Stamp: {{ request.getRequestStamp}}</li>
     <li>Response Stamp: {{ request.getResponseStamp}}</li>
 </ul>
+
+<h2>Measurements</h2>
+<ul>
+    {{#each request.getMeasurements }}
+    <li>{{getName}} = {{getValue}} ({{getUnit}})</li>
+    {{/each}}
+</ul>

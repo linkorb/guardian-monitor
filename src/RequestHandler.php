@@ -38,7 +38,13 @@ class RequestHandler
         $response->writeHead(200, array('Content-Type' => 'text/html'));
         $checkName = $request->getQuery()['checkName'];
         $check = $this->monitor->getCheck($checkName);
-        $html = $this->render('check.html.hbs', ['check' => $check]);
+        $agents = [];
+        foreach ($this->monitor->getAgents() as $agent) {
+            if ($agent->hasCheck($checkName)) {
+                $agents[] = $agent;
+            }
+        }
+        $html = $this->render('check.html.hbs', ['check' => $check, 'agents' => $agents]);
         $response->end($html);
     }
     

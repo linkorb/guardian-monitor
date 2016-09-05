@@ -78,4 +78,28 @@ class Check
     {
         return isset($this->channels[$name]);
     }
+    
+    protected $groupNames = [];
+    
+    public function getGroupNames()
+    {
+        return $this->groupNames;
+    }
+    
+    public function addGroupName($groupName)
+    {
+        $this->groupNames[] = $groupName;
+        $this->groupNames = array_unique($this->groupNames);
+        return $this;
+    }
+    
+    public function hasGroupName($groupName)
+    {
+        return in_array($groupName, $this->groupNames);
+    }
+    
+    public function getGroupNamesString()
+    {
+        return implode(',', $this->groupNames);
+    }
 }

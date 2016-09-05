@@ -17,22 +17,28 @@ class Agent
         return $this;
     }
     
-    protected $groups = [];
+    protected $groupNames = [];
     
-    public function getGroups()
+    public function getGroupNames()
     {
-        return $this->groups;
+        return $this->groupNames;
     }
     
-    public function setGroups($groups)
+    public function addGroupName($groupName)
     {
-        $this->groups = $groups;
+        $this->groupNames[] = $groupName;
+        $this->groupNames = array_unique($this->groupNames);
         return $this;
     }
     
-    public function getGroupsString()
+    public function hasGroupName($groupName)
     {
-        return implode(',', $this->groups);
+        return in_array($groupName, $this->groupNames);
+    }
+    
+    public function getGroupNamesString()
+    {
+        return implode(',', $this->groupNames);
     }
     
     protected $lastSeen;
@@ -71,6 +77,16 @@ class Agent
     {
         $this->mute = $mute;
         return $this;
+    }
+    
+    public function hasCheck($name)
+    {
+        foreach ($this->getAgentChecks() as $agentCheck) {
+            if ($agentCheck->getCheck()->getName()==$name) {
+                return true;
+            }
+        }
+        return false;
     }
     
 }

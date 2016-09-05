@@ -73,6 +73,7 @@ class YamlLoader
             if (isset($checkData['channels'])) {
                 $channelNames = explode(',', $checkData['channels']);
                 foreach ($channelNames as $channelName) {
+                    $channelName = trim($channelName);
                     $channel = $monitor->getChannel(trim($channelName));
                     if (!$channel) {
                         throw new RuntimeException("Unknown channel $channelName for check $name");
@@ -80,9 +81,18 @@ class YamlLoader
                     $check->addChannel($channel);
                 }
             }
+            if (isset($checkData['groups'])) {
+                $groups = $checkData['groups'];
+                if (!is_array($groups)) {
+                    throw new RuntimeException("groups on check " . $name . " is not an array");
+                }
+                foreach ($groups as $groupName) {
+                    print_r($groupName);
+                    $check->addGroupName($groupName);
+                }
+            }
             $monitor->addCheck($check);
         }
-        
         return $monitor;
     }
 }

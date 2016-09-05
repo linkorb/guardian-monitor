@@ -4,8 +4,16 @@
     <li>Command: {{ check.getCommand}}</li>
     <li>Interval: {{ check.getInterval}}</li>
     <li>Last: {{ check.getLastText}}</li>
+    <li>Groups: {{ check.getGroupNamesString}}</li>
 </ul>
     
+<h2>Agents</h2>
+<ul>
+    {{#each agents }}
+    <li><a href="/?controller=agent&amp;agentName={{getName}}">{{getName}}</a></li>
+    {{/each}}
+</ul>
+
 <h2>Results</h2>
 <ul>
     {{#each checkResults }}
