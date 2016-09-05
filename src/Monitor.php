@@ -396,7 +396,7 @@ class Monitor
         
         $requestHandler = new RequestHandler($this);
         $this->http->on('request', [$requestHandler, 'handle']);
-        $this->socket->listen($this->getPort());
+        $this->socket->listen($this->getPort(), '0.0.0.0');
         $this->scheduleNextTick();
 
         $this->loop->run();
