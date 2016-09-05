@@ -71,10 +71,14 @@ class YamlLoader
                 $check->setInterval($checkData['interval']);
             }
             if (isset($checkData['channels'])) {
-                $channelNames = explode(',', $checkData['channels']);
+                
+                $channelNames = $checkData['channels'];
+                if (!is_array($channelNames)) {
+                    throw new RuntimeException("channels on check " . $name . " is not an array");
+                }
                 foreach ($channelNames as $channelName) {
                     $channelName = trim($channelName);
-                    $channel = $monitor->getChannel(trim($channelName));
+                    $channel = $monitor->getChannel($channelName);
                     if (!$channel) {
                         throw new RuntimeException("Unknown channel $channelName for check $name");
                     }
