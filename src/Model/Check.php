@@ -29,7 +29,7 @@ class Check
     
     public function setCommand($command)
     {
-        $this->command = $command;
+        $this->command = (string)$command;
         return $this;
     }
     
