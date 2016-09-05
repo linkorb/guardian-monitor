@@ -2,6 +2,7 @@
 
 guardian.yml
 monitor.yml
+checks/
 
 ### Eclipse ###
 *.pydevproject
