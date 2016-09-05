@@ -42,7 +42,7 @@ class Check
     
     public function setInterval($interval)
     {
-        $this->interval = $interval;
+        $this->interval = (int)$interval;
         return $this;
     }
     
