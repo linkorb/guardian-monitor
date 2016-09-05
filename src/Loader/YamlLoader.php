@@ -58,6 +58,9 @@ class YamlLoader
             $channelClass = '\\Guardian\\Monitor\\Channel\\' . ucfirst($channelData['type']) . 'Channel';
             $channel = new $channelClass($name, $channelData['arguments']);
             $monitor->addChannel($channel);
+            if (isset($channelData['announce'])) {
+                $channel->send('Starting Guardian Monitor on ' . $monitor->getName() . ' (Channel: ' . $name . ')');
+            }
         }
 
         foreach ($data['checks'] as $name => $checkData) {
