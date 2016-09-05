@@ -10,6 +10,7 @@ use Guardian\Monitor\Model\Check;
 use Guardian\Monitor\Model\Agent;
 use Guardian\Monitor\Model\Change;
 use Guardian\Monitor\Model\AgentCheck;
+use Guardian\Monitor\Model\Measurement;
 use Guardian\Monitor\Channel\ChannelInterface;
 
 class Monitor
@@ -81,6 +82,7 @@ class Monitor
     {
         return $this->channels;
     }
+    
     public function getChannel($name)
     {
         return $this->channels[$name];
@@ -349,6 +351,14 @@ class Monitor
                     return;
                 }
                 $request = $this->checkRequests[$requestId];
+
+                foreach ($data['payload']['measurements'] as $mData) {
+                    $measurement = new Measurement();
+                    $measurement->setName($mData['name']);
+                    $measurement->setValue($mData['value']);
+                    $measurement->setUnit($mData['unit']);
+                    $request->addMeasurement($measurement);
+                }
                 $request->setStatusCode($data['payload']['statusCode']);
                 $request->setResponseStamp(time());
                 $agent = $this->getAgent($from);

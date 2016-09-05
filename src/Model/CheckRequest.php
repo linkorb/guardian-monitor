@@ -79,6 +79,18 @@ class CheckRequest
         return $this;
     }
     
+    protected $measurements = [];
+    
+    public function addMeasurement(Measurement $measurement)
+    {
+        $this->measurements[] = $measurement;
+        return $this;
+    }
+    
+    public function getMeasurements()
+    {
+        return $this->measurements;
+    }
     
     
 }
