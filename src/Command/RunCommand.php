@@ -28,10 +28,8 @@ class RunCommand extends Command
         $loader = new YamlLoader();
         $data = $loader->loadYaml($filename);
         $monitor = $loader->loadMonitor($data);
-
         
         $output->writeln('Running Guardian Monitor');
-        print_r($monitor);
         $monitor->run();
     }
 }

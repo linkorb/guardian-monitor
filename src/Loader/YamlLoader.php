@@ -91,7 +91,6 @@ class YamlLoader
                     throw new RuntimeException("groups on check " . $name . " is not an array");
                 }
                 foreach ($groups as $groupName) {
-                    print_r($groupName);
                     $check->addGroupName($groupName);
                 }
             }

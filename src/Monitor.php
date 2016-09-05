@@ -229,7 +229,7 @@ class Monitor
                 } else {
                     $out .= $checkNames[0] . ' ';
                 }
-                echo 'Channel ' . $channel->getName() . ': ' . trim($out) . "\n";
+                //echo 'Channel ' . $channel->getName() . ': ' . trim($out) . "\n";
                 $channel->send($out);
             }
         }
@@ -411,7 +411,7 @@ class Monitor
         $this->stomp->connect();
         
         $this->stomp->subscribe('/topic/monitor', function ($frame) {
-            echo "Message received: {$frame->body}\n";
+            //echo "Message received: {$frame->body}\n";
             $this->processMessage((string)$frame->body);
         });
         
