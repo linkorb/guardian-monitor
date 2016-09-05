@@ -41,6 +41,8 @@ class CheckRequest
         $this->requestStamp = $requestStamp;
         return $this;
     }
+    
+    protected $responseStamp;
     public function getResponseStamp()
     {
         return $this->responseStamp;
