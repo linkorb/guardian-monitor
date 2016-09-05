@@ -19,7 +19,9 @@
         "zordius/lightncandy": "dev-master",
         "react/http": "0.4.*",
         "react/stomp": "0.2.*",
-        "hipchat/hipchat-php": ">=1.0.0"
+        "hipchat/hipchat-php": ">=1.0.0",
+        "maknz/slack": "~1.0",
+        "xi/sms": "~0.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.8",
